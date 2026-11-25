@@ -11,7 +11,7 @@
 <div class="layout">
 <section><h2>Carte galactique</h2><p id="resources"></p>
 <svg id="map" aria-label="Carte de la partie"></svg>
-<p class="key"><b>Anneau doré</b> · cible du filtre actif. Le chiffre indique le propriétaire d’une pièce, le joueur 1 représente les Nevlas dans cet exemple. ◆ indique un vaisseau.</p>
+<p class="key"><b>Anneau doré</b> · cible du filtre actif. Le chiffre indique le propriétaire d’une pièce, selon son numéro dans l’export. ◆ indique un vaisseau.</p>
 </section>
 <section><h2>Coups calculés</h2><label for="family">Famille d’action</label><select id="family"><option value="">Toutes les actions</option></select>
 <label for="prep">Préparation</label><select id="prep"><option value="">Tous les coups</option><option value="direct">Directs</option><option value="conversion">Avec conversion</option></select>
@@ -92,7 +92,7 @@ async function load(){
  for(const tile of score.avancees)line(tile.piste+' · '+tile.effet+' — '+(tile.conditions.join(' / ')||'Accessible lors d’un gain de technologie'));
  parseMoves(md);drawMap(d);
  const p=d.players[d.gamestate.active_player];
- byId('position').textContent='Nevlas · Manche '+d.board.roundNum+' · Coup '+d.notifications.move_nbr+' · La Flotte perdue';
+ byId('position').textContent=score.faction+' · Manche '+d.board.roundNum+' · Coup '+d.notifications.move_nbr+(d.board.config?.lostFleet?' · La Flotte perdue':'');
  byId('resources').textContent=p.gold+' crédits · '+p.ore+' minerais · '+p.knowledge+' connaissances · '+p.qic+' QIC';
  for(const id of ['family','prep'])byId(id).onchange=()=>{selected='';render()};
  byId('clear').onclick=()=>{selected='';render()};render();

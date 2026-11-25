@@ -6,11 +6,11 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 
 | Choix | Coût principal | Préparation |
 |---|---|---|
-| Titane (0, 2) · +0 PV (manche et technologies) | 2 cr, 4 min, 2 QIC | 2 jetons III pour 1 QIC |
-| Gaia (1, -4) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jetons III pour 1 QIC |
-| Glace (2, -1) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jetons III pour 1 QIC |
-| Gaia (5, -9) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jetons III pour 1 QIC |
-| Terra (6, -5) · +0 PV (manche et technologies) | 2 cr, 4 min, 2 QIC | 2 jetons III pour 1 QIC |
+| Titane (0, 2) · +0 PV (manche et technologies) | 2 cr, 4 min, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Gaia (1, -4) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Glace (2, -1) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Gaia (5, -9) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Terra (6, -5) · +0 PV (manche et technologies) | 2 cr, 4 min, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC | direct |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC | direct |
 
@@ -22,13 +22,13 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 | Titane (1, 3) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn, 1 QIC | direct |
 | Gaia (1, -4) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
 | Glace (2, -1) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
-| Gaia (5, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jetons III pour 1 QIC |
+| Gaia (5, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Gaia (5, -9) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
 | Terra (6, -5) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
-| Titane (7, -2) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn, 2 QIC | 2 jetons III pour 1 QIC |
-| Glace (8, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jetons III pour 1 QIC |
-| Gaia (-2, 6) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jetons III pour 1 QIC |
+| Titane (7, -2) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Glace (8, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Gaia (-2, 6) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
 
 ## Mine avec 1 étape offerte (6)

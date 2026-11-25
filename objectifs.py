@@ -1,6 +1,7 @@
 """Règles des objectifs et technologies. Les identifiants sont ceux de BGA."""
 import json
 import sys
+from factions import NAMES
 from pathlib import Path
 
 PISTES = ['Terraformation', 'Navigation', 'IA', 'Projet Gaia', 'Économie', 'Science']
@@ -159,7 +160,7 @@ def synthese(d):
             when,unit,rate,resource=EFFETS[tile]
             effect=f'{when} · {rate} {resource}'+(' par '+unit if unit!='fois' else '')
         advanced.append({'piste':(PISTES+['Flotte perdue'])[i],'tuile':tile,'effet':effect,'conditions':reasons})
-    return {'manches':[f'{rate} PV · {event}' for k in b['roundBonus'][1:] for event,rate in [MANCHES[k]]],
+    return {'faction':NAMES[players[str(pid)]['raceId']], 'manches':[f'{rate} PV · {event}' for k in b['roundBonus'][1:] for event,rate in [MANCHES[k]]],
             'objectifs':finals,'avancees':advanced}
 if __name__=='__main__':
     print(json.dumps(synthese(json.loads(Path(sys.argv[1]).read_text())),ensure_ascii=False,indent=2))
