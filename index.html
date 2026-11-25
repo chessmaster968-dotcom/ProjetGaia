@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Projet Gaia · Analyse du tour</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101c27;color:#f4f0e6;font:16px/1.55 system-ui,sans-serif}main{max-width:1200px;margin:auto;padding:28px clamp(14px,4vw,52px) 48px}header{border-bottom:1px solid #39505d;margin-bottom:22px}h1,h2{font-family:Georgia,serif;font-weight:500;margin:0}h1{font-size:clamp(36px,6vw,64px);line-height:1.15}h2{font-size:27px}p{margin:8px 0 16px;color:#c5d4dc}.layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}section{background:#172934;border:1px solid #364e5b;border-radius:14px;padding:18px}svg{width:100%;display:block;background:#10212d;border-radius:8px;margin:12px 0}.key{font-size:.88rem}.key b{color:#ffd77a}label{display:block;color:#bacbd4;font-size:.9rem;margin:12px 0 4px}select,button{font:inherit;padding:7px 10px;color:#fff;background:#243b49;border:1px solid #68818d;border-radius:6px}select{max-width:100%;width:100%}button{cursor:pointer}.cell{cursor:pointer}.cell:hover polygon,.cell:focus polygon{stroke:white;stroke-width:2}.list{max-height:520px;overflow:auto}.move{padding:12px 2px;border-top:1px solid #39505d}.move strong,.move small{display:block}.move small{color:#bbd1db}#count{color:#ffda87}#resources{color:#e9debd}button[hidden]{display:none}@media(max-width:760px){.layout{grid-template-columns:1fr}.list{max-height:none}main{padding-top:18px}}
+</style>
+<main>
+<header><h1>Projet Gaia</h1><p id="position">Chargement de la position…</p></header>
+<div class="layout">
+<section><h2>Carte galactique</h2><p id="resources"></p>
+<svg id="map" aria-label="Carte de la partie"></svg>
+<p class="key"><b>Anneau doré</b> · cible du filtre actif. Le chiffre indique le propriétaire d’une pièce, le joueur 1 représente les Nevlas dans cet exemple. ◆ indique un vaisseau.</p>
+</section>
+<section><h2>Coups calculés</h2><label for="family">Famille d’action</label><select id="family"><option value="">Toutes les actions</option></select>
+<label for="prep">Préparation</label><select id="prep"><option value="">Tous les coups</option><option value="direct">Directs</option><option value="conversion">Avec conversion</option></select>
+<p id="count" aria-live="polite"></p><button id="clear" hidden>Effacer la sélection de case</button><div class="list" id="moves"></div>
+</section></div></main>
+<script>
+'use strict';
+const byId=id=>document.getElementById(id);
+const colors=['','#539cda','#c46b49','#dc554f','#e1bf55','#977360','#9ca8b1','#e9eef1','#64b68a','#a07cc0','#c7ad78','#a59286','#c59fa6'];
+const svgNS='http://www.w3.org/2000/svg';
+const rows=[], rings=new Map();
+let selected='';
+function svgElement(tag,attrs){
+ const el=document.createElementNS(svgNS,tag);
+ for(const [k,v] of Object.entries(attrs)) el.setAttribute(k,v);
+ return el;
+}
+function parseMoves(source){
+ let group='';
+ for(const line of source.split(/\r?\n/)){
+  if(line.startsWith('## ')){group=line.slice(3).replace(/ \(\d+\)$/,''); byId('family').add(new Option(group,group));}
+  else if(group && line.startsWith('| ') && !line.startsWith('| Choix |')){
+   const [label,cost,prep]=line.slice(1,-1).split('|').map(x=>x.trim());
+   const match=label.match(/\((-?\d+),\s*(-?\d+)\)/);
+   rows.push({group,label,cost,prep,key:match?match[1]+','+match[2]:''});
+  }
+ }
+}
+function drawMap(data){
+ const el=byId('map'),cells=Object.values(data.map).flatMap(Object.values);
+ const coords=cells.map(h=>[Math.sqrt(3)*12*(h.q+h.r/2),18*h.r]);
+ const xs=coords.map(p=>p[0]),ys=coords.map(p=>p[1]);
+ el.setAttribute('viewBox',[Math.min(...xs)-16,Math.min(...ys)-16,Math.max(...xs)-Math.min(...xs)+32,Math.max(...ys)-Math.min(...ys)+32].join(' '));
+ const points=Array.from({length:6},(_,i)=>{const a=(60*i-30)*Math.PI/180;return [12*Math.cos(a),12*Math.sin(a)].join(',')}).join(' ');
+ cells.forEach((h,i)=>{
+  const key=h.q+','+h.r, g=svgElement('g',{transform:'translate('+coords[i].join(' ')+')'});
+  g.append(svgElement('polygon',{points,fill:'#192e3b',stroke:'#314956','stroke-width':0.65}));
+  if(h.planetType){
+   const title=svgElement('title',{});title.textContent='Case ('+key+')';g.append(title);
+   g.append(svgElement('circle',{r:6.2,fill:colors[h.planetType]||'#66788c'}));
+   const mark=h.planetType>=15?'◆':h.buildings.map(b=>b.playerId).join('/');
+   if(mark){const t=svgElement('text',{'text-anchor':'middle',y:3,'font-size':8,'font-weight':700,fill:'#101b22'});t.textContent=mark;g.append(t);}
+  }
+  if(rows.some(r=>r.key===key)){
+   const ring=svgElement('circle',{r:9,fill:'none','stroke-width':1.5});g.append(ring);rings.set(key,ring);
+   g.setAttribute('class','cell');g.setAttribute('tabindex',0);g.setAttribute('role','button');g.setAttribute('aria-label','Filtrer la case '+key);
+   const select=()=>{selected=selected===key?'':key;render();};
+   g.onclick=select;g.onkeydown=e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();select()}};
+  }
+  el.append(g);
+ });
+}
+function render(){
+ const group=byId('family').value,prep=byId('prep').value;
+ const filtered=rows.filter(r=>(!group||r.group===group)&&(!prep||(prep==='direct')===(r.prep==='direct')));
+ const keys=new Set(filtered.map(r=>r.key));
+ for(const [key,ring] of rings)ring.setAttribute('stroke',key===selected?'white':keys.has(key)?'#ffd77a':'none');
+ const visible=filtered.filter(r=>!selected||r.key===selected);
+ byId('count').textContent=visible.length+' choix'+(selected?' · case ('+selected+')':'');
+ byId('clear').hidden=!selected;
+ const list=byId('moves');list.replaceChildren();
+ for(const r of visible){
+  const item=document.createElement('div');item.className='move';
+  const title=document.createElement('strong'),cost=document.createElement('div'),note=document.createElement('small');
+  title.textContent=r.group+' · '+r.label;cost.textContent=r.cost;note.textContent=r.prep==='direct'?'Direct':'Préparation · '+r.prep;
+  item.append(title,cost,note);list.append(item);
+ }
+}
+async function load(){
+ const [d,md]=await Promise.all(['coup61.json','coups.md'].map(async path=>{const res=await fetch(path);if(!res.ok)throw Error(path);return path.endsWith('json')?res.json():res.text()}));
+ parseMoves(md);drawMap(d);
+ const p=d.players[d.gamestate.active_player];
+ byId('position').textContent='Nevlas · Manche '+d.board.roundNum+' · Coup '+d.notifications.move_nbr+' · La Flotte perdue';
+ byId('resources').textContent=p.gold+' crédits · '+p.ore+' minerais · '+p.knowledge+' connaissances · '+p.qic+' QIC';
+ for(const id of ['family','prep'])byId(id).onchange=()=>{selected='';render()};
+ byId('clear').onclick=()=>{selected='';render()};render();
+}
+load().catch(()=>{byId('position').textContent='Impossible de charger les fichiers de la partie. Ouvre cette page depuis GitHub Pages.'});
+</script>
+</html>
