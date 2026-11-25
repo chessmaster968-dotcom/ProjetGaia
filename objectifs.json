@@ -1,0 +1,110 @@
+{
+  "manches": [
+    "4 PV · laboratoire",
+    "4 PV · comptoir",
+    "2 PV · mine",
+    "3 PV · mine Gaia",
+    "5 PV · académie ou institut",
+    "3 PV · nouveau secteur"
+  ],
+  "objectifs": [
+    {
+      "objectif": "Distance maximale institut–académie",
+      "compteurs": {
+        "1": 0,
+        "2": 0,
+        "3": 0
+      },
+      "pv": {
+        "1": 12,
+        "2": 12,
+        "3": 12
+      }
+    },
+    {
+      "objectif": "Satellites et stations spatiales",
+      "compteurs": {
+        "1": 0,
+        "2": 0,
+        "3": 0
+      },
+      "pv": {
+        "1": 12,
+        "2": 12,
+        "3": 12
+      }
+    }
+  ],
+  "avancees": [
+    {
+      "piste": "Terraformation",
+      "tuile": 24,
+      "effet": "comptoir · 3 PV",
+      "conditions": [
+        "Niveau 4 ou 5 en Terraformation",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "Navigation",
+      "tuile": 33,
+      "effet": "passage · 2 PV par astéroïdes",
+      "conditions": [
+        "Niveau 4 ou 5 en Navigation",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "IA",
+      "tuile": 21,
+      "effet": "passage · 1 PV par types",
+      "conditions": [
+        "Niveau 4 ou 5 en IA",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "Projet Gaia",
+      "tuile": 15,
+      "effet": "acquisition · 2 PV par secteurs",
+      "conditions": [
+        "Niveau 4 ou 5 en Projet Gaia",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "Économie",
+      "tuile": 22,
+      "effet": "recherche · 2 PV",
+      "conditions": [
+        "Niveau 4 ou 5 en Économie",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "Science",
+      "tuile": 31,
+      "effet": "acquisition · 4 PV par secteurs lointains",
+      "conditions": [
+        "Niveau 4 ou 5 en Science",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    },
+    {
+      "piste": "Flotte perdue",
+      "tuile": 16,
+      "effet": "acquisition · 2 PV par Gaia",
+      "conditions": [
+        "1/3 vaisseaux explorés",
+        "Une technologie standard découverte à recouvrir",
+        "Une tuile Alliance verte à retourner"
+      ]
+    }
+  ]
+}

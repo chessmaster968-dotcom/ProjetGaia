@@ -9,6 +9,7 @@ import sys
 from collections import deque, defaultdict
 from pathlib import Path
 from math import ceil
+from objectifs import bonus_manche, technologies, pistes, compteurs, gains_technologie, EFFETS
 
 TRACKS = ['Terraformation', 'Navigation', 'IA', 'Projet Gaia', 'Économie', 'Science']
 PLANETS = ['Espace','Terra','Oxyde','Volcanique','Désert','Marais','Titane','Glace','Gaia']
@@ -51,26 +52,46 @@ def analyze(d):
     pid = str(d['gamestate']['active_player'])
     p = d['players'][pid]
     board = d['board']
-    if (p['raceId'] != 13 or p['buildings']['9'] or p['techs'] or p['fedTiles']
-        or p['research'] != [0,0,0,0,0,0,3] or p['boosterId'] != 5
+    if (p['raceId'] != 13 or p['buildings']['9']
+        or p['boosterId'] != 5
         or d['gamestate']['name'] != 'statePlayerTurn' or not board['config']['lostFleet']
-        or p['score'] != 0 or p['numAvailGaiaformers'] or p['artifacts']):
+        or p['numAvailGaiaformers'] or p['artifacts']):
         raise ValueError('Position hors du périmètre Nevlas validé. Étendre les règles avant de conclure.')
     ships = board['lostFleet']['ships']
     visited = [x for x in ships if pid in map(str,x['playerIds'])]
-    if [x['type'] for x in visited] != [18]:
+    if not any(x['type']==18 for x in visited):
         raise ValueError('Configuration des vaisseaux à étendre.')
     cells = [h for row in d['map'].values() for h in row.values()]
     owned = [(h,b['buildingId']) for h in cells for b in h['buildings'] if str(b['playerId'])==pid]
-    if sorted(b for _,b in owned) != [4,5,9] or board['roundNum'] != 2:
+    if sorted(b for _,b in owned) != [4,5,9]:
         raise ValueError('Configuration de bâtiments ou manche hors périmètre.')
     initial = (p['gold'],p['ore'],p['knowledge'],p['qic'],*p['power'][1:],p['power'][0])
     paths = reachable(initial)
     results = defaultdict(list)
-    def add(group,label,c=0,o=0,k=0,q=0,power=0,tokens=0):
+    metrics=compteurs(d,pid)[1]
+    def add(group,label,c=0,o=0,k=0,q=0,power=0,tokens=0,events=None,tech=None,cover=None):
         for s,path in paths.items():
             if all(x>=y for x,y in zip(s,(c,o,k,q))) and 2*s[6]>=power and sum(s[4:7])>=tokens:
                 cost=', '.join(f'{n} {u}' for n,u in zip((c,o,k,q,power,tokens),('cr','min','conn','QIC','puissance','jetons')) if n) or 'gratuit'
+                events=events or {}
+                vp=bonus_manche(board,events)
+                active={t['techId'] for t in p['techs'] if not t.get('isCovered')} - {cover}
+                if tech in EFFETS:
+                    post=dict(metrics)
+                    if events.get('laboratoire'):
+                        post['comptoirs']-=1
+                        post['laboratoires']+=1
+                    immediate=gains_technologie(tech,'acquisition',post)
+                    vp+=immediate.get('PV',0)
+                    for unit,n in immediate.items():
+                        if unit!='PV': label+=f' · +{n} {unit}'
+                    active.add(tech)
+                for tile in active & EFFETS.keys():
+                    for event,times in events.items():
+                        vp+=gains_technologie(tile,event,metrics,times).get('PV',0)
+                vp+=7*(tech==3)
+                vp+=3*events.get('mine Gaia',0)*(4 in active)
+                label+=f' · +{vp} PV (manche et technologies)'
                 results[group].append((label,cost,' → '.join(path) or 'direct'))
                 return
     def free(index):
@@ -88,30 +109,43 @@ def analyze(d):
             terra = 3 if pt==12 else 0 if pt==8 else min(7-pt,pt)
             if steps and (pt == 8 or terra == 0):
                 continue
-            ore=1+3*max(0,terra-steps)
-            qic=max(0,ceil((dist-1-extra)/2))+(pt==8)
+            ore=1+[3,3,2,1,1,1][p["research"][1]]*max(0,terra-steps)
+            qic=max(0,ceil((dist-[1,1,2,2,3,4][p["research"][2]]-extra-int(any(t["techId"]==41 and not t.get("isCovered") for t in p["techs"])))/2))+(pt==8)
             name=PLANETS[pt] if pt<9 else 'Proto'
-            add(mode,f"{name} ({h['q']}, {h['r']})",2,ore,price,qic,pw)
+            add(mode,f"{name} ({h['q']}, {h['r']})",2,ore,price,qic,pw,events={
+                'mine':1,'mine Gaia':int(pt==8),'étape':terra,
+                'nouveau secteur':int((h['tileNum']<100 or h['tileNum']>=200) and all(a['tileNum']!=h['tileNum'] for a,_ in owned)),
+                'nouveau type':int(all(a['planetType']!=pt for a,_ in owned))})
     for h,b in owned:
         xy=f"({h['q']}, {h['r']})"
         if b==4:
             neighbor=any(distance(z,h)<=2 and any(str(u['playerId'])!=pid and u['buildingId']>=4 for u in z['buildings']) for z in cells)
-            add('Amélioration','Comptoir '+xy,3 if neighbor else 6,2)
+            add('Amélioration','Comptoir '+xy,3 if neighbor else 6,2,events={"comptoir":1})
         if b==5:
-            for n,tech in enumerate(board['techs']):
-                for track in ([TRACKS[n]] if n<6 else TRACKS):
-                    add('Laboratoire',f'{xy} · technologie {tech} · {track}',5,3)
-    for track in TRACKS:
-        add('Recherche',track,k=4)
+            for tech,cover,tracks in technologies(d,pid)[0]:
+                for track in tracks:
+                    target=TRACKS[track-1] if track else 'aucune progression'
+                    payment=f' · recouvrir {cover} et retourner une Alliance' if cover else ''
+                    if track and p['research'][track]==4:
+                        payment+=' · retourner une Alliance pour le niveau 5'
+                    add('Laboratoire',f'{xy} · technologie {tech} · {target}{payment}',5,3,
+                        events={'laboratoire':1,'recherche':int(bool(track))},tech=tech,cover=cover)
+    for track in pistes(d,pid):
+        add('Recherche',TRACKS[track-1],k=4,events={'recherche':1})
     for index,pw,label in [(1,3,'Gagner 2 jetons I'),(2,4,'Gagner 2 minerais'),(3,4,'Gagner 7 crédits'),(4,4,'Gagner 2 connaissances'),(5,7,'Gagner 3 connaissances')]:
         if free(index):
             add('Puissance',label,power=pw)
-    for art in visited[0]['availArtifacts']:
+    for tile in p['techs']:
+        tid=tile['techId']
+        if tid in (10,11,12) and not tile.get('isCovered') and not tile['isActionUsed']:
+            reward=gains_technologie(tid,'action',metrics)
+            add('Action technologique',' + '.join(f'{v} {u}' for u,v in reward.items()))
+    for art in next(x for x in visited if x['type']==18)['availArtifacts']:
         if art:
             effects={7:'3 PV + 1 PV par type colonisé', 10:'5 crédits et 2 minerais', 6:'3 PV par secteur extérieur colonisé'}
             add('Artefact',f'Crépuscule · {effects.get(art,art)}',tokens=6)
     for boost in board['availBoosters']:
-        add('Passer',f'Booster {boost} · '+{7:'comptoirs',8:'laboratoires',9:'institut et académies'}.get(boost,''))
+        add('Passer',f'Booster {boost} · '+{7:'comptoirs',8:'laboratoires',9:'institut et académies'}.get(boost,''),events={'passage':1})
     return results
 
 if __name__=='__main__':

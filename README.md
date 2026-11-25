@@ -20,3 +20,13 @@ L'identification des pièces et des actions suit les modules publics BGA gpj-act
 - Jeu de base : https://www.feuerland-spiele.de/fileadmin/game/Gaia_Project/GAIA_PROJECT_EN_rules_Web.pdf
 - Extension : https://www.boardgamehelpers.com/GaiaProject/Images/GP_Exp_Rule_EN_V1_Web.pdf
 - Adaptation BGA : https://x.boardgamearena.net/data/themereleases/current/games/gaiaproject/260921-2211/modules/gpj-actions.js
+
+## Objectifs et technologies
+
+La page lit également objectifs.json. Après une modification des règles ou de la position témoin, régénérer les deux sorties et exécuter les tests.
+
+    python analyse.py coup61.json > coups.md
+    python objectifs.py coup61.json > objectifs.json
+    python verifier.py
+
+Le module objectifs.py lit les 13 objectifs de manche, les 9 objectifs finaux et les technologies avancées du jeu de base et de La Flotte perdue. La projection de classement utilise les compteurs actuels des joueurs humains. Les PV indiqués sur les coups couvrent les bonus de manche et de technologie. Les conditions affichées concernent un joueur déjà autorisé à gagner une technologie. Une action de laboratoire fournit cette occasion dans le générateur Nevlas. La simulation d'une partie complète, l'Automa et l'énumération des alliances restent hors du périmètre testé.

@@ -16,7 +16,7 @@
 <section><h2>Coups calculés</h2><label for="family">Famille d’action</label><select id="family"><option value="">Toutes les actions</option></select>
 <label for="prep">Préparation</label><select id="prep"><option value="">Tous les coups</option><option value="direct">Directs</option><option value="conversion">Avec conversion</option></select>
 <p id="count" aria-live="polite"></p><button id="clear" hidden>Effacer la sélection de case</button><div class="list" id="moves"></div>
-</section></div></main>
+</section></div><section style="margin-top:18px"><h2>Objectifs et technologies</h2><div id="scoring"></div></section></main>
 <script>
 'use strict';
 const byId=id=>document.getElementById(id);
@@ -81,7 +81,15 @@ function render(){
  }
 }
 async function load(){
- const [d,md]=await Promise.all(['coup61.json','coups.md'].map(async path=>{const res=await fetch(path);if(!res.ok)throw Error(path);return path.endsWith('json')?res.json():res.text()}));
+ const [d,md,score]=await Promise.all(['coup61.json','coups.md','objectifs.json'].map(async path=>{const res=await fetch(path);if(!res.ok)throw Error(path);return path.endsWith('json')?res.json():res.text()}));
+ const panel=byId('scoring');
+ function line(text,tag='p'){const node=document.createElement(tag);node.textContent=text;panel.append(node)}
+ line('Objectifs de manche','h3');
+ score.manches.forEach((bonus,i)=>line('M'+(i+1)+(i+1===d.board.roundNum?' · en cours':'')+' — '+bonus));
+ line('Classement si la partie se terminait maintenant','h3');
+ for(const goal of score.objectifs)line(goal.objectif+' — '+Object.entries(goal.compteurs).map(([p,n])=>'J'+p+' : '+n+' ('+goal.pv[p]+' PV)').join(' · '));
+ line('Technologies avancées','h3');
+ for(const tile of score.avancees)line(tile.piste+' · '+tile.effet+' — '+(tile.conditions.join(' / ')||'Accessible lors d’un gain de technologie'));
  parseMoves(md);drawMap(d);
  const p=d.players[d.gamestate.active_player];
  byId('position').textContent='Nevlas · Manche '+d.board.roundNum+' · Coup '+d.notifications.move_nbr+' · La Flotte perdue';
