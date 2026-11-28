@@ -105,7 +105,7 @@ def technologies(d,pid):
             choices.extend((tile,cover,pistes(d,pid,1) or [0]) for cover in covers)
     return choices,details
 
-def prendre_avancee(d,pid,tile,cover,track,alliances):
+def prendre_avancee(d,pid,tile,cover,track,alliances,*,pierre_en_premier=None):
     """Retourne une copie après acquisition. Les autres effets du bâtiment et les
     récompenses de piste sont résolus par l'action appelante. Les indices de
     jetons permettent de choisir quelles alliances retourner."""
@@ -129,6 +129,16 @@ def prendre_avancee(d,pid,tile,cover,track,alliances):
     base['isCovered']=1
     after['techs'].append({'techId':tile,'isCovered':0,'coveredTechId':cover,'isActionUsed':0})
     if track:
+        from puissance import Bols, charge_recherche
+        charge=charge_recherche(p,track)
+        if charge:
+            depart=Bols.joueur(after)
+            premier=depart.charger(charge,True)[0]
+            dernier=depart.charger(charge,False)[0]
+            if premier!=dernier and pierre_en_premier is None:
+                raise ValueError('Choisir la priorité de charge de la pierre-esprit')
+            etat=premier if pierre_en_premier else dernier
+            after=out['players'][str(pid)]=etat.appliquer(after)
         after['research'][track]+=1
     metrics=compteurs(out,pid)[1]
     for unit,n in gains_technologie(tile,'acquisition',metrics).items():

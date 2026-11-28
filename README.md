@@ -53,3 +53,15 @@ La page lit également objectifs.json. Après une modification des règles ou de
     python verifier.py
 
 Le module objectifs.py lit les 13 objectifs de manche, les 9 objectifs finaux et les technologies avancées du jeu de base et de La Flotte perdue. La projection de classement utilise les compteurs actuels des joueurs humains. Les PV indiqués sur les coups couvrent les bonus de manche et de technologie. Les conditions affichées concernent un joueur déjà autorisé à gagner une technologie. Une action de laboratoire fournit cette occasion dans le générateur de coups. La simulation d'une partie complète, l'Automa et l'énumération des alliances restent hors du périmètre testé.
+
+## Charge de puissance
+
+Le rapport indique les bols après la charge du joueur actif et, pour chaque voisin humain d’une construction, la charge qu’il peut accepter, la quantité offerte et le coût maximal en PV. Un voisin peut toujours décliner. Les offres se calculent à distance deux en prenant son bâtiment de valeur maximale. Les stations spatiales et satellites sont exclus.
+
+Le module `puissance.py` conserve les bols, la zone Gaia et la position de la pierre-esprit. `Bols.charger` renvoie l’état obtenu et la charge effective. `reactions` énumère les choix et leur coût. `appliquer_reaction` renvoie le nouvel état du joueur avec ses PV. `revenus` énumère les résultats distincts des ordres de perception des lots. Les phases de décision utilisent en priorité les lots encore proposés par BGA.
+
+Le générateur applique la charge après la préparation du paiement retenue. Il traite les paliers de recherche, l’action de la technologie standard 9, les Tinkéroïdes, les Lantides, les navettes et les phases de revenus. Les constructions ordinaires, les améliorations, la rétrogradation Firaks et les placements de mine bonus ou de planète perdue utilisent le même calcul de voisinage. Les gains de jetons et les sacrifices sont des opérations distinctes de la charge.
+
+En Python, `analyze(export, projections)` remplit un dictionnaire initialement vide, indexé par famille et libellé du coup. Le champ `bols` contient les issues calculées pour la charge, et `offres` les montants proposés par adversaire. Pour une réaction, appliquer le choix retenu avec `appliquer_reaction`. Les effets en plusieurs décisions sont calculés dans la phase correspondante (par exemple au choix de la case de la planète perdue). Les revenus futurs nécessitent les lots de la nouvelle position.
+
+    python verifier_puissance.py

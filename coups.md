@@ -1,6 +1,6 @@
 # Projet Gaia · coup 61
 
-Une ligne par action, cible et mode. Une préparation possible est indiquée. Les gains, choix de paiement alternatifs et réactions adverses ne sont pas simulés.
+Une ligne par action, cible et mode. Une préparation possible est indiquée. Les bols affichés suivent la préparation indiquée. Chaque adversaire décide séparément des offres de charge passive.
 
 ## Mine ordinaire (7)
 
@@ -10,7 +10,7 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 | Gaia (1, -4) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Glace (2, -1) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Gaia (5, -9) · +0 PV (manche et technologies) | 2 cr, 1 min, 2 QIC | 2 jeton(s) III → 1 QIC |
-| Terra (6, -5) · +0 PV (manche et technologies) | 2 cr, 4 min, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Terra (6, -5) · +0 PV (manche et technologies) · charge passive possible/offerte J3 1/1 (0 PV max.) | 2 cr, 4 min, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC | direct |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC | direct |
 
@@ -22,12 +22,12 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 | Titane (1, 3) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn, 1 QIC | direct |
 | Gaia (1, -4) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
 | Glace (2, -1) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
-| Gaia (5, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Gaia (5, -3) · +0 PV (manche et technologies) · charge passive possible/offerte J3 1/1 (0 PV max.) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Gaia (5, -9) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 1 QIC | direct |
-| Terra (6, -5) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
+| Terra (6, -5) · +0 PV (manche et technologies) · charge passive possible/offerte J3 1/1 (0 PV max.) | 2 cr, 4 min, 1 conn | direct |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
-| Titane (7, -2) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
-| Glace (8, -3) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Titane (7, -2) · +0 PV (manche et technologies) · charge passive possible/offerte J3 1/1 (0 PV max.) | 2 cr, 4 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
+| Glace (8, -3) · +0 PV (manche et technologies) · charge passive possible/offerte J3 1/1 (0 PV max.), J2 2/2 (1 PV max.) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Gaia (-2, 6) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 conn, 2 QIC | 2 jeton(s) III → 1 QIC |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 conn | direct |
 
@@ -37,7 +37,7 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 |---|---|---|
 | Oxyde (0, -6) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 3 puissance | direct |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 3 puissance | direct |
-| Marais (-1, 0) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 3 puissance | direct |
+| Marais (-1, 0) · +0 PV (manche et technologies) · charge passive possible/offerte J2 2/2 (1 PV max.) | 2 cr, 4 min, 1 QIC, 3 puissance | direct |
 | Marais (-5, 5) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 3 puissance | direct |
 | Oxyde (-4, 5) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 3 puissance | direct |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 3 puissance | direct |
@@ -52,11 +52,11 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 | Volcanique (7, -8) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Titane (7, -10) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Proto (-2, 3) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
-| Marais (-1, 0) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
-| Proto (-6, 2) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
+| Marais (-1, 0) · +0 PV (manche et technologies) · charge passive possible/offerte J2 2/2 (1 PV max.) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
+| Proto (-6, 2) · +0 PV (manche et technologies) · charge passive possible/offerte J2 1/1 (0 PV max.), J3 2/2 (1 PV max.) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Marais (-5, 5) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Oxyde (-4, 5) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
-| Proto (-3, -4) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
+| Proto (-3, -4) · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Titane (-7, 4) · +0 PV (manche et technologies) | 2 cr, 1 min, 1 QIC, 5 puissance | sacrifier en bol II |
 | Volcanique (-7, 5) · +0 PV (manche et technologies) | 2 cr, 4 min, 1 QIC, 5 puissance | sacrifier en bol II |
 
@@ -70,30 +70,30 @@ Une ligne par action, cible et mode. Une préparation possible est indiquée. Le
 
 | Choix | Coût principal | Préparation |
 |---|---|---|
-| (-1, -3) · technologie 8 · Terraformation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 9 · Navigation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 2 · IA · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 6 · Projet Gaia · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 4 · Économie · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 3 · Science · +7 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · Terraformation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · Navigation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · IA · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · Projet Gaia · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · Économie · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 1 · Science · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · Terraformation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · Navigation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · IA · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · Projet Gaia · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · Économie · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 5 · Science · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · Terraformation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · Navigation · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · IA · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · Projet Gaia · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · Économie · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
-| (-1, -3) · technologie 7 · Science · +0 PV (manche et technologies) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 8 · Terraformation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 9 · Navigation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 2 · IA · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 6 · Projet Gaia · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 4 · Économie · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 3 · Science · +7 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · Terraformation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · Navigation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · IA · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · Projet Gaia · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · Économie · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 1 · Science · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · Terraformation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · Navigation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · IA · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · Projet Gaia · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · Économie · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 5 · Science · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · Terraformation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · Navigation · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · IA · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · Projet Gaia · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · Économie · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
+| (-1, -3) · technologie 7 · Science · +0 PV (manche et technologies) · charge passive possible/offerte J3 3/3 (2 PV max.) | 5 cr, 3 min | direct |
 
 ## Recherche (6)
 

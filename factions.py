@@ -1,6 +1,7 @@
 """Règles de faction appliquées à l'état BGA du joueur actif."""
 from collections import deque
 from functools import lru_cache
+from puissance import Bols
 
 NAMES = ('','Terraniens','Lantides','Xenos','Gleens','Taklons','Ambas','Hadsch Hallas',
          'Ivits','Géodens','Bal T’aks','Firaks','Bescods','Nevlas','Itars','Tinkéroïdes',
@@ -26,25 +27,25 @@ def terraforming(p, planet):
 def qic_income(p):
     return not (p['raceId']==4 and p['buildings']['8']>0)
 
-def payment_solver(p, fleet):
+def payment_solver(p, fleet, avec_bols=False):
     """Un témoin de paiement par coût. Les transformations explorées sont
     orientées vers le déficit courant pour éviter de permuter les gaspillages."""
     race=p['raceId']; pi=institute(p)
     multiplier=2 if race==13 and pi else 1
     start=(p['gold'],p['ore'],p['knowledge'],p['qic'],*p['power'][1:4],
-           p.get('race5brainstonePos',-1),p['numAvailGaiaformers'])
+           p.get('race5brainstonePos',-1),p['numAvailGaiaformers'],p['power'][0])
 
     @lru_cache(None)
     def solve(c,o,k,q,power,tokens,formers=0):
         queue=deque([(start,())]); seen={start}
         while queue:
             state,path=queue.popleft()
-            gold,ore,know,qic,i,j,t,brain,gaia=state
+            gold,ore,know,qic,i,j,t,brain,gaia,zone=state
             spend=t*multiplier+3*(brain==3)
             physical=i+j+t+int(brain in (1,2,3))
             if (gold>=c and ore>=o and know>=k and qic>=q and spend>=power
                     and physical>=tokens and gaia>=formers):
-                return path
+                return (path, Bols(zone,i,j,t,brain)) if avec_bols else path
             def push(label, changes, newbrain=None):
                 nxt=list(state)
                 for index,delta in changes.items(): nxt[index]+=delta
@@ -57,7 +58,7 @@ def payment_solver(p, fleet):
                     seen.add(nxt);queue.append((nxt,path+(label,)))
             if j>=2:
                 label='sacrifier en bol II' + (' · jeton sacrifié vers Gaia' if race==14 else '')
-                push(label,{5:-2,6:1})
+                push(label,{5:-2,6:1,9:int(race==14)})
             if brain==2 and j>=1:
                 push('sacrifier pour charger la pierre-esprit',{5:-1},3)
             needs=(gold<c,ore<o or (ore<=o and physical<tokens),know<k,qic<q)
@@ -72,7 +73,7 @@ def payment_solver(p, fleet):
                 if race==7 and pi and idx and gold>=units:
                     push(f'{units} crédits → {label}',{0:-units,idx:1})
             if race==13 and know<k and t:
-                push('III vers Gaia pour 1 connaissance',{6:-1,2:1})
+                push('III vers Gaia pour 1 connaissance',{6:-1,2:1,9:1})
             if race==10 and qic<q and gaia>formers:
                 push('gaiaformeur vers Gaia pour 1 QIC',{8:-1,3:1})
             if race==3 and fleet and ore and (spend<power or physical<tokens or any(needs)):

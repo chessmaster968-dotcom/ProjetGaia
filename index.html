@@ -93,7 +93,7 @@ async function load(){
  parseMoves(md);drawMap(d);
  const p=d.players[d.gamestate.active_player];
  byId('position').textContent=score.faction+' · Manche '+d.board.roundNum+' · Coup '+d.notifications.move_nbr+(d.board.config?.lostFleet?' · La Flotte perdue':'');
- byId('resources').textContent=p.gold+' crédits · '+p.ore+' minerais · '+p.knowledge+' connaissances · '+p.qic+' QIC';
+ byId('resources').textContent=p.gold+' crédits · '+p.ore+' minerais · '+p.knowledge+' connaissances · '+p.qic+' QIC · Bols I/II/III '+p.power.slice(1,4).join('/')+' · Gaia '+p.power[0];
  for(const id of ['family','prep'])byId(id).onchange=()=>{selected='';render()};
  byId('clear').onclick=()=>{selected='';render()};render();
 }
