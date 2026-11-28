@@ -9,7 +9,7 @@ Le fichier analyse.py est la source modifiable en Python 3.10 ou supérieur, san
 
 ## Couverture de cette version
 
-Le moteur sélectionne la faction avec le champ BGA `raceId`. La commande accepte les exports bruts ; le cas témoin anonymisé reste fourni. Les tests couvrent les dix-huit factions sur des positions construites, et la régression des 78 choix du coup 61. Lancer aussi `python verifier_factions.py`.
+Le moteur sélectionne la faction avec le champ BGA `raceId`. La commande accepte les exports bruts ; le cas témoin anonymisé reste fourni. Les tests couvrent les dix-huit factions sur des positions construites, et la régression des 83 choix du coup 61. Lancer aussi `python verifier_factions.py`.
 
 | Faction | Calculs spécifiques |
 |---|---|
@@ -65,3 +65,20 @@ Le générateur applique la charge après la préparation du paiement retenue. I
 En Python, `analyze(export, projections)` remplit un dictionnaire initialement vide, indexé par famille et libellé du coup. Le champ `bols` contient les issues calculées pour la charge, et `offres` les montants proposés par adversaire. Pour une réaction, appliquer le choix retenu avec `appliquer_reaction`. Les effets en plusieurs décisions sont calculés dans la phase correspondante (par exemple au choix de la case de la planète perdue). Les revenus futurs nécessitent les lots de la nouvelle position.
 
     python verifier_puissance.py
+
+
+## Comparer les conversions
+
+Sur la page, « Comparer les paiements » affiche jusqu’à trois réserves possibles pour le coup sélectionné. Chaque exemple donne une suite de conversions et les crédits, minerais, connaissances, QIC, bols et gaiaformeurs disponibles après paiement. Les effets du coup interviennent ensuite.
+
+Pour énumérer les soldes distincts d’un coup, reprendre son numéro dans le rapport généré à partir du même export. Le numéro dépend de la position.
+
+    python analyse.py coup61.json --paiements 1
+
+Pour explorer toutes les conversions libres à partir des réserves de la position, y compris lors de la phase de conversion BGA :
+
+    python analyse.py coup61.json --conversions
+
+Le parcours regroupe les chemins qui atteignent le même état et conserve une préparation par solde. Il peut inclure des échanges facultatifs pour préparer un tour futur. Il garde les lots de puissance des Nevlas et de la pierre-esprit pendant les conversions, puis efface leur reliquat à la fin du paiement. Les conversions de phase Gaia des Terraniens utilisent leur traitement spécifique. Pour étudier les conversions après une action, il faut fournir les réserves mises à jour avec ses gains. La liste détaillée peut devenir volumineuse sur une position riche.
+
+    python verifier_conversions.py

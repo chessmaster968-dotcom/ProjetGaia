@@ -5,7 +5,9 @@ Références : règles Capstone, client public BGA Gaia Project 260921-2211
 (modules gpj-actions, map, bonusTiles, research, factions, ui).
 """
 import json
-import sys
+from argparse import ArgumentParser
+from itertools import islice
+from conversions import Conversions
 from collections import defaultdict
 from dataclasses import replace
 from puissance import Bols, reactions, revenus, charge_recherche
@@ -102,7 +104,8 @@ def analyze(d, projections=None):
             if fins:
                 label+=(' · charge '+str(charge) if charge else '')+' · '+' ou '.join(x.description() for x in fins)
             if projections is not None:
-                projections[group,label]={'bols':tuple(fins or ()), 'offres':offres}
+                projections[group,label]={'bols':tuple(fins or ()), 'offres':offres,
+                    'cout':(c,o,k,q,power,tokens,formers), 'vers_gaia':group=='Projet Gaia'}
             results[group].append((label,cost,' → '.join(path) or 'direct'))
             return
     def free(index):
@@ -330,11 +333,52 @@ def analyze(d, projections=None):
     return results
 
 if __name__=='__main__':
-    data=json.loads(Path(sys.argv[1]).read_text(encoding='utf8'))
-    results=analyze(data)
+    parser=ArgumentParser(description='Calculer les coups ou les réserves après paiement.')
+    parser.add_argument('export')
+    mode=parser.add_mutually_exclusive_group()
+    mode.add_argument('--paiements',type=int,metavar='NUMERO')
+    mode.add_argument('--conversions',action='store_true',help='Conversions libres depuis les réserves de l’export')
+    args=parser.parse_args()
+    data=json.loads(Path(args.export).read_text(encoding='utf8'))
+    phase=data['gamestate']['name']
+    libre=phase in ('statePlayerTurn','stateConvert','stateExtraMineBuild')
+    joueur=data['players'][str(data['gamestate']['active_player'])]
+    moteur=Conversions(joueur,bool(data['board']['config'].get('lostFleet')))
+    if args.conversions:
+        if not libre:
+            parser.error('Les conversions libres du tour normal sont indisponibles dans cette phase')
+        for chemin,etat in moteur.paiements((0,)*7):
+            print((' → '.join(chemin) or 'Aucune conversion')+' · '+etat.description())
+        raise SystemExit
+    projections={}
+    results=analyze(data,projections)
+    coups=[(g,row) for g,rows in results.items() for row in rows]
+    def options(group,row):
+        projet=projections[group,row[0]]
+        return moteur.paiements(projet['cout'],projet['vers_gaia'])
+    if args.paiements is not None:
+        if not libre or not 1<=args.paiements<=len(coups):
+            parser.error('Numéro de coup ou phase incompatible')
+        group,row=coups[args.paiements-1]
+        print(group+' · '+row[0])
+        for chemin,etat in options(group,row):
+            print((' → '.join(chemin) or 'Direct')+' · '+etat.description())
+        raise SystemExit
     print('# Projet Gaia · coup',data['notifications']['move_nbr'])
-    print('\nUne ligne par action, cible et mode. Une préparation possible est indiquée. Les bols affichés suivent la préparation indiquée. Chaque adversaire décide séparément des offres de charge passive.\n')
+    print('\nLes soldes comparent les réserves juste après paiement, avant les effets du coup. Chaque numéro permet de consulter tous les paiements.\n')
+    numero=0
+    apercus={}
     for group,rows in results.items():
-        print(f'## {group} ({len(rows)})\n\n| Choix | Coût principal | Préparation |\n|---|---|---|')
-        for row in rows: print('| '+' | '.join(row)+' |')
+        print(f'## {group} ({len(rows)})\n\n| Choix | Coût principal | Préparation | N° | Soldes après paiement (exemples) |\n|---|---|---|---|---|')
+        for row in rows:
+            numero+=1
+            detail=''
+            if libre:
+                projet=projections[group,row[0]]
+                cle=(projet['cout'],projet['vers_gaia'])
+                if cle not in apercus:
+                    apercus[cle]=' / / '.join((' → '.join(p) or 'Direct')+' ⇒ '+e.description()
+                        for p,e in islice(options(group,row),3))
+                detail=apercus[cle]
+            print('| '+' | '.join((*row,str(numero),detail))+' |')
         print()
